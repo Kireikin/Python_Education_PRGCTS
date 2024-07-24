@@ -5,7 +5,7 @@ def pair_sum(number):
             if number % (i + j) == 0:
                 pair.append([j, i])
                 #  pair.append(i)
-    #  pair.sort()
+    pair.sort()
     return pair
 
 
