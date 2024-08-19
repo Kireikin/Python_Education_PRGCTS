@@ -4,7 +4,7 @@ class House:
         self.number_of_floors = int(number_of_floors)
 
     def go_to(self, new_floor):  # код из предыдущего задания
-        if new_floor < 1 or new_floor > self.number_of_floors:
+        if new_floor <= 0 or new_floor > self.number_of_floors:
             print('"Такого этажа не существует".')
         else:
             for i in range(new_floor):
@@ -21,8 +21,8 @@ h1 = House('ЖК Эльбрус', 10)
 h2 = House('ЖК Акация', 20)
 
 # __str__
-print(str(h1))   # доработано, тк в тз не было указано обращение к str
-print(str(h2))   # --//--
+print(h1)   # как это работает?
+print(h2)   # --//--
 
 # __len__
 print(len(h1))
