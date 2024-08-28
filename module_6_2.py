@@ -35,8 +35,8 @@ class Sedan(Vehicle):
         print('Владелец:', self.owner)
 
     def set_color(self, new_color):
-        if new_color.casefold() in self._Vehicle__COLOR_VARIANTS:
-            self._Vehicle__color = new_color
+        if new_color.casefold() in self._Vehicle__COLOR_VARIANTS:  # выводит предупреждение о _Vehicle__COLOR_VARIANTS
+            self._Vehicle__color = new_color  # выводит предупреждение о _Vehicle__color
         else:
             print(f'Нельзя сменить цвет на {new_color}')
 
