@@ -79,7 +79,7 @@ class UrTube:
                     video_play = i
             if not video_play:
                 pass
-            elif video_play.adult_mode:
+            elif video_play.adult_mode:  # добавлено 01.09.2024
                 if self.current_user[1].age < 18:
                     print('Вам нет 18 лет, пожалуйста покиньте страницу')
                 else:
