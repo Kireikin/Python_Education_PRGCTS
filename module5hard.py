@@ -78,14 +78,15 @@ class UrTube:
                 if name_video == i.title:
                     video_play = i
             if not video_play:
-                print()
-            elif self.current_user[1].age < 18:
-                print('Вам нет 18 лет, пожалуйста покиньте страницу')
-            else:
-                for j in range(video_play.duration):
-                    print(j + 1, end=' ')
-                    time.sleep(0.3)
-                print('Конец видео')
+                pass
+            elif video_play.adult_mode:
+                if self.current_user[1].age < 18:
+                    print('Вам нет 18 лет, пожалуйста покиньте страницу')
+                else:
+                    for j in range(video_play.duration):
+                        print(j + 1, end=' ')
+                        time.sleep(0.3)
+                    print('Конец видео')
 
     def print_title(self):  # для проверки алгоритма выводит наименования фильмов
         print("В базе записаны следующие фильмы:")
