@@ -17,6 +17,7 @@
 """
 import os.path
 
+
 class Product:
     def __init__(self, name: str, weight: float, category: str):
         self.name = name
@@ -33,31 +34,29 @@ class Shop:
         self.__file_name = 'products.txt'
         self.__read_for_write = True
         self.__data = []
+        self.name = []
 
     def get_products(self):
         if os.path.exists(self.__file_name):
             file = open(self.__file_name, 'r')
-            self.__data = file.read()
+            for line in file:
+                self.name.append(line.split(',')[0])
             file.close()
-            if self.__read_for_write:
-                print(self.__data)
+            file = open(self.__file_name, 'r')
+            file_print = file.read()
+            file.close()
+            return file_print
         else:
             print(f'Файл {self.__file_name} не найден')
 
     def add(self, *products):
-        self.__read_for_write = False
         self.get_products()  # в self.__data записываем содержимое файла
-        self.__read_for_write = True
         file = open(self.__file_name, 'a')
         for new_product in products:
-            search_result = True
-            for save_product in self.__data:
-                if new_product.name == save_product.name:
-                    print(f'Продукт {new_product.name} уже есть в магазине')
-                    search_result = False
-                    break
-            if search_result:
-                file.write(new_product)
+            if new_product.name in self.name:
+                print(f'Продукт {new_product.name} уже есть в магазине')
+            else:
+                file.write(new_product.__str__()+'\n')
         file.close()
 
 
