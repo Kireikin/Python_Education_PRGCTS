@@ -33,11 +33,11 @@ filled(закрашенный, bool)
 Все атрибуты и методы класса Figure
 Атрибут __radius, рассчитать исходя из длины окружности (одной единственной стороны).
 Метод get_square возвращает площадь круга (можно рассчитать как через длину, так и через радиус).
-
 Атрибуты класса Triangle: sides_count = 3
 Каждый объект класса Triangle должен обладать следующими атрибутами и методами:
 Все атрибуты и методы класса Figure
 Метод get_square возвращает площадь треугольника. (можно рассчитать по формуле Герона)
+
 Атрибуты класса Cube: sides_count = 12
 Каждый объект класса Cube должен обладать следующими атрибутами и методами:
 Все атрибуты и методы класса Figure.
@@ -52,6 +52,7 @@ filled(закрашенный, bool)
 Пример 3: Cube((200, 200, 100), 9), т.к. сторон(рёбер) у куба - 12, то его стороны будут - [9, 9, 9, ....., 9] (12)
 Пример 4: Cube((200, 200, 100), 9, 12), т.к. сторон(рёбер) у куба - 12, то его стороны будут - [1, 1, 1, ....., 1]
 """
+import math
 
 
 class Figure:
@@ -109,10 +110,30 @@ class Circle(Figure):
         self.sides_count: int = 1
 
     def __radius(self):
-        return self.__len__() / 2 / 3.14
+        return len(self) / 2 / 3.14
 
     def get_square(self):
         return self.__radius() * self.__radius() * 3.14 / 2
+
+
+class Triangle(Figure):
+    def __init__(self, color, sides):
+        Figure.__init__(self, color, sides)
+        self.sides_count: int = 3
+
+    def get_square(self):  # Площадь треугольника по формуле Герона
+        p = 0.5 * len(self)
+        return math.sqrt(p * (p - self.sides[0]) * (p - self.sides[1]) * (p - self.sides[2]))
+
+
+class Cube(Figure):
+    def __init__(self, color, sides):
+        Figure.__init__(self, color, sides)
+        self.sides_count: int = 16
+        self.__sides = [sides for x in range(16)]
+
+    def get_volume(self):  # Площадь треугольника по формуле Герона
+        return self.sides ^ 3
 
 
 # Код для проверки
