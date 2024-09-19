@@ -18,7 +18,8 @@ def personal_sum(numbers):
 def calculate_average(numbers):
 
     try:
-        return personal_sum(numbers)[0]/(len(numbers))
+        result, incorrect_data = personal_sum(numbers)
+        return result/(len(numbers)-incorrect_data)
     except TypeError:
         print('В numbers записан некорректный тип данных')
         return None
