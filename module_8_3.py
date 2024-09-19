@@ -1,33 +1,37 @@
-class Car:
-    def __init__(self, model, vin, reg_nom):
-        self.model = model
-        self.__vin = vin if self.__is_valid_vin(vin) else None
-        self.__reg_nom = reg_nom if self.__is_valid_numbers(reg_nom) else None
-
-    def __is_valid_vin(self, vin):
-        if isinstance(vin, int) and (1000000<= vin<= 9999999):
-            return True
-        elif not isinstance(vin, int):
-            return IncorrectVinNumber  # 'Некорректный тип {vin} номер'
-        elif not (1000000<= vin<= 9999999):
-            return IncorrectVinNumber #  'Неверный диапазон для {vin} номера'
-
-    def __is_valid_numbers(self, reg_nom):
-        if isinstance(reg_nom, str) and (len(reg_nom) == 6):
-            return True
-
 class IncorrectVinNumber(Exception):
-    def __init__(self, message, extra_info):
+    def __init__(self, message):
         self.message = message
-        self.extra_info = extra_info
-
 
 
 class IncorrectCarNumbers(Exception):
-    def __init__(self, message, extra_info):
+    def __init__(self, message):
         self.message = message
-        self.extra_info = extra_info
 
+
+class Car:
+    def __init__(self, model, vin, reg_nom):
+        if self.__is_valid_vin(vin) and self.__is_valid_numbers(reg_nom):
+            self.model = model
+            self.__vin = vin
+            self.__reg_nom = reg_nom
+
+    @staticmethod
+    def __is_valid_vin(vin):
+        if isinstance(vin, int) and (1000000 <= vin <= 9999999):
+            return True
+        elif not isinstance(vin, int):
+            raise IncorrectVinNumber(f'Некорректный тип vin номер - {vin}')
+        elif not (1000000 <= vin <= 9999999):
+            raise IncorrectVinNumber(f'Неверный диапазон для vin номера - {vin}')
+
+    @staticmethod
+    def __is_valid_numbers(reg_nom):
+        if isinstance(reg_nom, str) and len(reg_nom) == 6:
+            return True
+        elif not isinstance(reg_nom, int):
+            raise IncorrectCarNumbers(f'Некорректный тип данных для номеров - {type(reg_nom)}')
+        elif not len(reg_nom) == 6:
+            raise IncorrectCarNumbers(f'Неверная длина номера - {len(reg_nom)}')
 
 
 if __name__ == "__main__":
