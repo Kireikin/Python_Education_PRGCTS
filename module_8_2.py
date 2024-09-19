@@ -2,6 +2,7 @@
 "Сложные моменты и исключения в стеке вызовов функции".
 """
 
+
 def personal_sum(numbers):
     result = 0
     incorrect_data = 0
@@ -10,7 +11,19 @@ def personal_sum(numbers):
             result += value
         except TypeError:
             incorrect_data += 1
+            print(f'Некорректный тип данных для подсчёта суммы -{value}')
     return result, incorrect_data
+
+
+def calculate_average(numbers):
+
+    try:
+        return personal_sum(numbers)[0]/(len(numbers))
+    except TypeError:
+        print('В numbers записан некорректный тип данных')
+        return None
+    except ZeroDivisionError:
+        return 0
 
 
 if __name__ == "__main__":
