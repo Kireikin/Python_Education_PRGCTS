@@ -11,7 +11,7 @@ def all_variants(text):
         subsequences.append(list(itertools.combinations(text, num)))  # вычисляем и запоминаем все возможные комбинации
     for subnum in subsequences:
         for deep in subnum:
-            subsequences_out = (''.join(deep))  # собираем построчно полученные комбинации
+            subsequences_out = (''.join(deep))  # собираем полученные списки комбинаций в строку
             yield subsequences_out
 
 
