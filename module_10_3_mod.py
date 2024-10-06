@@ -12,39 +12,27 @@ from time import sleep
 
 class Bank:
     def __init__(self):
-        self.balance: int = 0
         self.lock = Lock()
-        self.flag = True
+        self.balance: int = 0
 
     def deposit(self):
         for i in range(100):
             adding_balance = randint(50, 500)
-            self.balance += adding_balance
-            # Заглушка одновременного вывода потоков
-            if self.lock.locked():
-                self.flag = False
-
-            with self.lock:
+            with self.lock:  # Блокировка приобретается перед изменением баланса
+                self.balance += adding_balance
                 print(f'Пополнение: {adding_balance}. Баланс: {self.balance}.')
-
-            if not self.flag:
-                self.lock.acquire()
-            # Конец заглушки одновременного вывода потоков
-
-            if self.balance >= 500 and self.lock.locked():
-                self.lock.release()
             sleep(0.001)
 
     def take(self):
         for j in range(100):
             withdrawing = randint(50, 500)
             print(f'Запрос на {withdrawing}')
-            if withdrawing <= self.balance:
-                self.balance -= withdrawing
-                print(f'Снятие:{withdrawing}. Баланс:{self.balance}')
-            else:
-                print(f'Запрос отклонён, недостаточно средств')
-                self.lock.acquire()
+            with self.lock:  # Блокировка приобретается перед чтением и изменением баланса
+                if withdrawing <= self.balance:
+                    self.balance -= withdrawing
+                    print(f'Снятие: {withdrawing}. Баланс: {self.balance}')
+                else:
+                    print(f'Запрос отклонён, недостаточно средств')
             sleep(0.001)
 
 
@@ -58,3 +46,4 @@ if __name__ == '__main__':
 
     th1.join()
     th2.join()
+    
