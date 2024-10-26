@@ -52,19 +52,19 @@ class TournamentTest(ut.TestCase):
     def sprint1(self):
         sprint_1 = runtour.Tournament(90, (self.runner_1, self.runner_3))
         self.all_results[1] = sprint_1.start()
-        self.assertEqual(self.all_results[1][2], 'Ник')
+        ut.TestCase.assertEqual(self, self.all_results[1][2], 'Ник')
         print('Track run 1')
 
     def sprint2(self):
         sprint_2 = runtour.Tournament(90, (self.runner_2, self.runner_3))
-        self.all_results[2] = sprint_2.start()
-        self.assertEqual(self.all_results[2][2], 'Ник')
+        TournamentTest.all_results[2] = sprint_2.start()
+        ut.TestCase.assertEqual(self, TournamentTest.all_results[2][2], 'Ник')
         print('Track run 2')
 
     def sprint3(self):
         sprint_3 = runtour.Tournament(90, (self.runner_1, self.runner_2, self.runner_3))
-        self.all_results[3] = sprint_3.start()
-        self.assertEqual(self.all_results[3][3], 'Ник')
+        TournamentTest.all_results[3] = sprint_3.start()
+        ut.TestCase.assertEqual(self, TournamentTest.all_results[3][3], 'Ник')
         print('Track run 3')
 
     @classmethod
