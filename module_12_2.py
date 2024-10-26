@@ -49,18 +49,29 @@ class TournamentTest(ut.TestCase):
         self.runner_2 = runtour.Runner('Андрей', 9)
         self.runner_3 = runtour.Runner('Ник', 3)
 
-    def sprint(self):
-        sprint_1 = runtour.Tournament(10, (self.runner_1, self.runner_3))
+    def sprint1(self):
+        sprint_1 = runtour.Tournament(90, (self.runner_1, self.runner_3))
         self.all_results[1] = sprint_1.start()
-        sprint_2 = runtour.Tournament(10, (self.runner_2, self.runner_3))
+        self.assertEqual(self.all_results[1][2], 'Ник')
+        print('Track run 1')
+
+    def sprint2(self):
+        sprint_2 = runtour.Tournament(90, (self.runner_2, self.runner_3))
         self.all_results[2] = sprint_2.start()
-        sprint_3 = runtour.Tournament(10, (self.runner_1, self.runner_2, self.runner_3))
+        self.assertEqual(self.all_results[2][2], 'Ник')
+        print('Track run 2')
+
+    def sprint3(self):
+        sprint_3 = runtour.Tournament(90, (self.runner_1, self.runner_2, self.runner_3))
         self.all_results[3] = sprint_3.start()
+        self.assertEqual(self.all_results[3][3], 'Ник')
+        print('Track run 3')
 
     @classmethod
     def tearDownClass(cls):
         for result in cls.all_results:
             print(result)
+        print('TEST IS COMPLETE')
 
 
 if __name__ == "__main__":
