@@ -6,19 +6,15 @@ logging.basicConfig(filename='runner_tests.log', filemode='w', level=logging.INF
                     format="%(asctime)s - %(module)s - %(levelname)s  %(funcName)s: - %(lineno)d - %(message)s")
 
 
-class RunnerTest(Runner):
-    def __init__(self):
-        super().__init__(Runner)
-
-    @classmethod
-    def setUpClass(cls):
-        print('TEST IS STARTED')
+class RunnerTest(unittest.TestCase, Runner, Tournament):
 
     def test_walk(self):
         try:
-            runner_test = Runner('Петя', -2)
-            runner_test.walk()
             logging.info('"test_walk" выполнен успешно')
+            runner_test = Runner('Петя', -2)
+            for i in range(10):
+                runner_test.walk()
+            self.assertEqual(runner_test.distance, 50)
             return
         except ValueError:
             logging.warning("Неверная скорость для Runner")
@@ -26,24 +22,22 @@ class RunnerTest(Runner):
 
     def test_run(self):
         try:
-            runner_test2 = Runner(12, 2)
-            runner_test2.run()
             logging.info('"test_run" выполнен успешно')
+            runner_test2 = Runner(12, 2)
+            for i in range(10):
+                runner_test2.walk()
+            self.assertEqual(runner_test2.distance, 50)
             return
         except TypeError:
             logging.warning("Неверный тип данных для объекта Runner")
             return
-
-    @classmethod
-    def tearDownClass(cls):
-        print('TEST IS COMPLETE')
 
 
 if __name__ == "__main__":
     # first = Runner('Вося', 10)
     # second = Runner('Илья', 5)
     # third = Runner('Арсен', 10)
-    #
+    # #
     # t = Tournament(101, first, second, third)
     # print(t.start())
 
