@@ -4,7 +4,7 @@ import asyncio
 from aiogram.utils import executor
 
 
-api = "7791865278:AAEFU04IluzmNI5qkajfojXucNS3G2JhmBA"
+api = ""
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
