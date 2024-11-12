@@ -45,12 +45,15 @@ async def send_calories(message, state):
     data = await state.get_data()
     pprint(data)
     print(data.get('weight'))
-    a, b, c = data.values()
-    calc = (10 * a) + (6.25 * b) - (5 * c) + 5
+    weight = data.get('weight')
+    growth = data.get('growth')
+    age = data.get('age')
+    # c, b, a = data.values()
+    calc = (10 * weight) + (6.25 * growth) - (5 * age) + 5
     # calc = (10 * data['weight']) + (6.25 * data['growth']) - (5 * data['age']) - 161
     # calc = (10 * a) + (6.25 * b) - (5 * c) - 161
     await message.answer(f"Ваша норма калорий:{calc}")
-    await state.finish
+    await state.finish()
 # Для мужчин: ПБМ = (10 × вес в кг) + (6, 25 × рост в см) − (5 × возраст в годах) + 5.
 # Для женщин: ПБМ = (10 × вес в кг) + (6, 25 × рост в см) − (5 × возраст в годах) − 161.
 
