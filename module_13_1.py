@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 
 
 async def start_strongman(name, power):
@@ -18,4 +19,8 @@ async def start_tournament():
     await task2
     await task3
 
+time_start = datetime.now()
 asyncio.run(start_tournament())
+time_end = datetime.now()
+time_res = time_end - time_start
+print('Время соревнования:', time_res)
