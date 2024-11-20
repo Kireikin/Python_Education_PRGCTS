@@ -13,15 +13,15 @@ balance INTEGER NOT NULL
 ''')
 cursor.execute(" CREATE INDEX IF NOT EXISTS idx_email ON Users (email)")
 
-
 # выше указанное - это настройка БД (setup), ниже  - это работа с базой данных
 
 
-def read_baze():  # читает всю базу каждый раз когда нам нужно
-    cursor.execute("SELECT * FROM Users")
+def read_baze(*arg):  # читает всю базу каждый раз когда и как нам нужно
+    cursor.execute(*arg)
     users = cursor.fetchall()  # записываем базу или результат вышеуказанной операции в переменную
     for user in users:  # выводим в консоль
         print(user)
+    print()
 
 
 #  Добавление записи в БД:
@@ -30,7 +30,9 @@ for i in range(10):  # этот код генерирует пользовате
                    (f"User{i + 1}", f"example{i + 1}@gmail.com", (i + 1) * 10, 1000)
                    )
 print("Сгенерированные записи в БД:")
-read_baze()  # смотрим
+read_baze("SELECT * FROM Users")  # смотрим всё
+
+
 # Обновите balance у каждой 2ой записи начиная с 1ой на 500
 id = 1
 while id <= int(10):
@@ -38,8 +40,9 @@ while id <= int(10):
                    (500, id)
                    )
     id += 2
+
 print("Обновленный balance у каждой 2ой записи начиная с 1ой на 500 в БД:")
-read_baze()  # смотрим
+read_baze("SELECT * FROM Users")  # смотрим всё
 
 # Удалите каждую 3ую запись в таблице начиная с 1ой:
 id = 1
@@ -49,18 +52,20 @@ while id <= int(10):
     id += 3
 
 print("Удалили каждую 3ую запись в таблице начиная с 1ой:")
-read_baze()  # смотрим
+read_baze("SELECT * FROM Users")  # смотрим всё
 
-cursor.execute("SELECT username, email, age, balance FROM Users WHERE age != ?", (60,))
+
 print("возраст не равен 60:")
-users = cursor.fetchall()  # записываем базу или результат вышеуказанной операции в переменную
+cursor.execute("SELECT username, email, age, balance FROM Users WHERE age != ?", (60,))
+# read_baze("SELECT username, email, age, balance FROM Users WHERE age != ?", (60,))
+users = cursor.fetchall()
 for user in users:  # выводим в консоль
-    print(f"Имя:{user[0]}| Почта:{user[1]}| Возраст: {user[2]}| Баланс: {user[3]} ")
+    print(f"Имя:{user[0]} | Почта:{user[1]} | Возраст: {user[2]} | Баланс: {user[3]}")
+print()
 
-
-# cursor.execute("DELETE FROM Users")  # чистим базу ;) из-за лени коментить каждый раз код
-# print("Записи удалены, база не должна содержать данные")
-# read_baze()
+cursor.execute("DELETE FROM Users")  # чистим базу ;) из-за лени коментить каждый раз код
+print("Записи удалены, база не должна содержать данные")
+read_baze("SELECT * FROM Users")
 
 connection.commit()
 connection.close()
