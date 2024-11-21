@@ -1,7 +1,0 @@
-my_string = input('Введите текстовую строку: ')
-print('Количество символов в введеной строке:', len(my_string))
-print('Все в верхнем регистре: ', my_string.upper())
-print('Все в нижнем регистре: ', my_string.lower())
-print('Без пробелов: ', my_string.strip())
-print('Первый символ строки: ', my_string[0])
-print('Последний символ строки: ', my_string[-1])
