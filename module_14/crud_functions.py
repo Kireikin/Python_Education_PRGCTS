@@ -12,6 +12,17 @@ def initiate_db():
                                     price       FLOAT
                                         )
                 ''')
+    # Добавляем в БД вторую таблицу если не создана
+    cursor1.execute('''
+    CREATE TABLE IF NOT EXISTS Users(
+                                    id INTEGER PRIMARY KEY,
+                                    username TEXT NOT NULL,
+                                    email TEXT NOT NULL,
+                                    age INTEGER,
+                                    balance REAL
+                                    )
+                    ''')
+    cursor1.execute(" CREATE INDEX IF NOT EXISTS idx_email ON Users (email)")
     connection1.commit()
     connection1.close()
 
@@ -24,6 +35,28 @@ def get_all_products():  # возвращает все записи из таб�
     products = cursor2.fetchall()
     connection2.close()
     return products
+
+
+def add_user(username, email, age):
+    connection_add = sqlite3.connect('databaze.db')  # setup DataBase
+    cursor_add = connection_add.cursor()
+    cursor_add.execute(" INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)",
+                       (f"{username}", f"{email}", age, 1000)
+                       )
+    connection_add.commit()
+    connection_add.close()
+
+
+def is_included(username):
+    connection_add = sqlite3.connect('databaze.db')  # setup DataBase
+    cursor_add = connection_add.cursor()
+    check_user = cursor_add.execute("SELECT * FROM Users WHERE username = ?", (username,))
+    if check_user.fetchone()[0] is None:
+        connection_add.commit()
+        connection_add.close()
+        return False  # имя пользователя не обнаружено
+    else:
+        return True  # обнаружен пользователь в записях
 
 
 if __name__ == '__main__':
