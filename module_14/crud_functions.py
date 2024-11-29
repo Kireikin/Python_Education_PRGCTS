@@ -41,7 +41,7 @@ def add_user(username, email, age):
     connection_add = sqlite3.connect('databaze.db')  # setup DataBase
     cursor_add = connection_add.cursor()
     cursor_add.execute(" INSERT INTO Users (username, email, age, balance) VALUES (?, ?, ?, ?)",
-                       (f"{username}", f"{email}", age, 1000)
+                       (username, email, age, 1000)
                        )
     connection_add.commit()
     connection_add.close()
@@ -52,27 +52,29 @@ def is_included(username):
     cursor_add = connection_add.cursor()
     check_user = cursor_add.execute("SELECT * FROM Users WHERE username = ?", (username,))
     if check_user.fetchone() is None:
-        connection_add.commit()
         connection_add.close()
         return False  # имя пользователя не обнаружено
     else:
         return True  # обнаружен пользователь в записях
 
 
-if __name__ == '__main__':
+def add_products():
     connection = sqlite3.connect('databaze.db')  # setup DataBase
     cursor = connection.cursor()
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS Products(
-                                    id          INTEGER PRIMARY KEY,
-                                    title       TEXT NOT NULL,
-                                    description TEXT,
-                                    price       FLOAT
-                                        )
-                ''')
+        CREATE TABLE IF NOT EXISTS Products(
+                                        id          INTEGER PRIMARY KEY,
+                                        title       TEXT NOT NULL,
+                                        description TEXT,
+                                        price       FLOAT
+                                            )
+                    ''')
     for i in range(4):  # этот код генерирует записи продуктов, выполняем 1 раз в этом коде:
+        title_product = f"Продукт {i + 1}"
+        description_product = f"Описание {i + 1}"
+        price_product = (i + 1) * 100
         cursor.execute(" INSERT INTO Products (title, description, price) VALUES (?, ?, ?)",
-                       (f"Продукт {i + 1}", f"Описание {i + 1}", (i + 1) * 100)
+                       (title_product, description_product, price_product)
                        )
     prods = get_all_products()
     for prod in prods:
@@ -80,3 +82,7 @@ if __name__ == '__main__':
 
     connection.commit()
     connection.close()
+
+
+if __name__ == '__main__':
+    add_products()
