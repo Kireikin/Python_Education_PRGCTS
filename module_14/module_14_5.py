@@ -12,8 +12,7 @@ import crud_functions as cfs
 
 products = cfs.get_all_products()  # подгружаем из БД Продукты из предыдущего задания
 
-
-api = "7791865278:AAEJZLkFJ_TuQPWFwm35m68gfum9-5klpe4"
+api = ""
 bot = Bot(token=api)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
@@ -133,14 +132,7 @@ async def send_confirm_message(call):
     await call.answer()
 
 
-@dp.message_handler(lambda message: cfs.is_included(message.text), text=['Регистрация'])
-async def sing_up(message):
-    await message.answer('Пользователь существует, введите другое имя')
-    await message.answer('Введите имя пользователя (только латинский алфавит):')
-    await RegistrationState.username.set()
-
-
-@dp.message_handler(lambda message: not cfs.is_included(message.text), text=['Регистрация'])
+@dp.message_handler(text=['Регистрация'])
 async def sing_up(message):
     await message.answer('Введите имя пользователя (только латинский алфавит):')
     await RegistrationState.username.set()
@@ -148,9 +140,13 @@ async def sing_up(message):
 
 @dp.message_handler(state=RegistrationState.username)
 async def set_username(message, state):
-    await state.update_data(username=message.text)
-    await message.answer('Введите свой email:')
-    await RegistrationState.email.set()
+    if cfs.is_included(message.text):
+        await message.answer('Пользователь существует, введите другое имя:')
+        await RegistrationState.username.set()
+    else:
+        await state.update_data(username=message.text)
+        await message.answer('Введите свой email:')
+        await RegistrationState.email.set()
 
 
 @dp.message_handler(state=RegistrationState.email)
@@ -174,6 +170,8 @@ async def set_age(message, state):
 
 @dp.message_handler()
 async def all_messages(message):
-    await message.answer('Для работы пота педалируй /start:', reply_markup=kb_start)
+    await message.answer('Для работы Бота педалируй /start:', reply_markup=kb_start)
+
+
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
