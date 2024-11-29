@@ -51,7 +51,7 @@ def is_included(username):
     connection_add = sqlite3.connect('databaze.db')  # setup DataBase
     cursor_add = connection_add.cursor()
     check_user = cursor_add.execute("SELECT * FROM Users WHERE username = ?", (username,))
-    if check_user.fetchone()[0] is None:
+    if check_user.fetchone() is None:
         connection_add.commit()
         connection_add.close()
         return False  # имя пользователя не обнаружено
