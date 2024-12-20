@@ -2,6 +2,7 @@
 from app.backend.db_lection import Base
 from sqlalchemy import Column, String, Boolean, Integer, ForeignKey
 from sqlalchemy.orm import relationship
+from app.models import *
 
 
 class Task(Base):
@@ -13,7 +14,9 @@ class Task(Base):
     content = Column(String)
     priority = Column(Integer, default=0)
     completed = Column(Boolean, default=False)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=True)  # целое число, внешний ключ на id из таблицы
+    # один user ко многим task
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=True, index=True)  # целое число, внешний ключ на id
+    # из таблицы
     # 'users', не NULL, с индексом.
     slug = Column(String, unique=True, index=True)  # целое число, внешний ключ на id из таблицы 'users', не NULL,
     # с индексом.

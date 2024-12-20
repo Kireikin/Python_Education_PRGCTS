@@ -2,6 +2,7 @@
 from app.backend.db_lection import Base
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
+from app.models import *
 
 
 class User(Base):
@@ -15,7 +16,7 @@ class User(Base):
     age = Column(Integer)
     slug = Column(String, unique=True, index=True)
     # user - объект связи с таблицей с таблицей User, где back_populates='tasks':
-    tasks = relationship("Task", back_populates="user")
+    tasks = relationship("Task", back_populates="user")  # один user ко многим task
 
 
 from sqlalchemy.schema import CreateTable  # для проверки сборки
