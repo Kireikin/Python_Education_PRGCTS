@@ -21,3 +21,4 @@ class User(Base):
 
 from sqlalchemy.schema import CreateTable  # для проверки сборки
 print(CreateTable(User.__table__))  # проверяем сборку
+
