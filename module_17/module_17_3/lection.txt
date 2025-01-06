@@ -1,0 +1,30 @@
+Миграции. Библиотека alembic.
+
+1. Устанавливаем через терминал: pip install alembic
+
+2. Просим создать в папку файлы для миграции в терминале: alembic init app/migration
+здесь app/migration - и есть та папка в которой будет все установенно
+
+3. интересны файл env.py и файл шаблона script.py.mako - их нужно будет редактировать
+
+4. В корневой директории проекта автоматически создаётся файл alembic.ini
+в нем указать адрес в строке адреса:
+sqlalchemy.url = sqlite:///ecommerce.db ,  ДЗ: sqlalchemy.url = sqlite:///taskmanager.db
+где ecommerce.db - указан в /backend/db_lection.py  ДЗ: DATABASE_URL = "sqlite:///taskmanager.db"
+
+5. редактируем файл env.py:
+находим строку target_metadata =
+и дополняем записями:
+# ДОПОЛНЯЕМ СВОИ ДАННЫЕ К ПРОЕКТУ
+from app.backend.db_lection import Base  # db_lection import Base из /backend/db_lection.py и так далее
+from app.models.category_lection import Category
+from app.models.products_lection import Product
+target_metadata = Base.metadata  # указываем целевую БД
+
+6. Проводим самую первую миграцию в терминале командой revision:
+alembic revision --autogenerate -m "Initial migration"
+- происходит миграция и создаются папка versions и некоторый блок, который описывает нашу БД и все изменения
+которые произведены в ней. Т.е. после каждого изменения БД нужно производить миграцию БД
+
+7. Выполните команду alembic upgrade head, которая позволит вам применить последнюю миграцию и создать таблицы User,
+  Task и запись текущей версии миграции: alembic upgrade head
