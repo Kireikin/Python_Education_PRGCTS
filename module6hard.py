@@ -1,112 +1,73 @@
 """
-Общее ТЗ:
-Реализовать классы Figure(родительский), Circle, Triangle и Cube, объекты которых будут обладать методами изменения
-размеров, цвета и т.д.
-Многие атрибуты и методы должны быть инкапсулированны и для них должны быть написаны интерфейсы взаимодействия
-(методы) - геттеры и сеттеры.
-
-Подробное ТЗ:
-Атрибуты класса Figure:
-sides_count = 0 Каждый объект класса Figure должен обладать следующими атрибутами:
-Атрибуты(инкапсулированные):
-__sides(список сторон (целые числа)),
-__color(список цветов в формате RGB)
-Атрибуты(публичные):
-filled(закрашенный, bool)
-И методами:
-Метод get_color, возвращает список RGB цветов.
-Метод __is_valid_color - служебный, принимает параметры r, g, b, который проверяет корректность переданных значений
-перед установкой нового цвета. Корректным цвет: все значения r, g и b - целые числа в диапазоне от 0 до 255
-(включительно).
-Метод set_color принимает параметры r, g, b - числа и изменяет атрибут __color на соответствующие значения,
-предварительно проверив их на корректность. Если введены некорректные данные, то цвет остаётся прежним.
-Метод __is_valid_sides - служебный, принимает неограниченное кол-во сторон, возвращает True если все стороны целые
-положительные числа и кол-во новых сторон совпадает с текущим, False - во всех остальных случаях.
-Метод get_sides должен возвращать значение атрибута __sides.
-Метод __len__ должен возвращать периметр фигуры.
-Метод set_sides(self, *new_sides) должен принимать новые стороны, если их количество не равно sides_count,
-то не изменять, в противном случае - менять.
-
-
-Атрибуты класса Circle: sides_count = 1
-Каждый объект класса Circle должен обладать следующими атрибутами и методами:
-Все атрибуты и методы класса Figure
-Атрибут __radius, рассчитать исходя из длины окружности (одной единственной стороны).
-Метод get_square возвращает площадь круга (можно рассчитать как через длину, так и через радиус).
-Атрибуты класса Triangle: sides_count = 3
-Каждый объект класса Triangle должен обладать следующими атрибутами и методами:
-Все атрибуты и методы класса Figure
-Метод get_square возвращает площадь треугольника. (можно рассчитать по формуле Герона)
-
-Атрибуты класса Cube: sides_count = 12
-Каждый объект класса Cube должен обладать следующими атрибутами и методами:
-Все атрибуты и методы класса Figure.
-Переопределить __sides сделав список из 12 одинаковы сторон (передаётся 1 сторона)
-Метод get_volume, возвращает объём куба.
-
-ВАЖНО!
-При создании объектов делайте проверку на количество переданных сторон, если сторон не ровно sides_count, то создать
-массив с единичными сторонами и в том кол-ве, которое требует фигура.
-Пример 1: Circle((200, 200, 100), 10, 15, 6), т.к. сторона у круга всего 1, то его стороны будут - [1]
-Пример 2: Triangle((200, 200, 100), 10, 6), т.к. сторон у треугольника 3, то его стороны будут - [1, 1, 1]
-Пример 3: Cube((200, 200, 100), 9), т.к. сторон(рёбер) у куба - 12, то его стороны будут - [9, 9, 9, ....., 9] (12)
-Пример 4: Cube((200, 200, 100), 9, 12), т.к. сторон(рёбер) у куба - 12, то его стороны будут - [1, 1, 1, ....., 1]
+Дополнительное практическое задание по модулю: "Наследование классов.
 """
 import math
 
 
 class Figure:
-
     def __init__(self, color, sides):
-        self.sides_count: int = 0
-        self.__sides: list = sides  # (список сторон (целые числа))
-        self.__color: list = color  # (список цветов в формате RGB)
-        self.filled = False  #
-        self.set_color(color[0], color[1], color[2])
+        self.sides_count = None  # (количество сторон)
+        self.__sides = self.set_sides(sides)  # (список сторон, целые числа - инкапсулированный)
+        self.__color = self.set_color(r=color[0], g=color[1], b=color[2])  # (список цветов в формате RGB - инкапсулированный)
+        self.filled = False  # (признак закрашенной фигуры - Boolean)
 
     def get_color(self):  # возвращает список RGB цветов
         return self.__color
 
-    def __is_valid_color(self, r, g, b):  # проверяет корректность переданных значений
+    @staticmethod
+    def __is_valid_color(r, g, b):  # проверяет корректность переданных значений (служебный метод)
         if 0 <= r <= 255 and 0 <= g <= 255 and 0 <= b <= 255:
             return True
         else:
-            print('Не верно определен цвет')
             return False
 
     def set_color(self, r, g, b):  # изменяет атрибут __color
         if self.__is_valid_color(r, g, b):
-            __color = (r, g, b)
+            self.__color = (r, g, b)
+            return [r, g, b]
         else:
-            print('Введенный цвет не верен, цвет не поменялся')
+            print(f'Введенный цвет {r, g, b} не верен, цвет не поменялся:')
 
-    def __is_valid_sides(self, *sides):  # принимает неограниченное кол-во сторон, возвращает True если все стороны целые
-        # положительные числа и кол-во новых сторон совпадает с текущим, False - во всех остальных случаях.
-        aas = len(sides)
+    @staticmethod
+    def __is_valid_sides(self, *sides):  # принимает неограниченное кол-во сторон, возвращает True если все стороны
+        # целые положительные числа и кол-во новых сторон совпадает с текущим, False - во всех остальных случаях.
         if len(sides) == self.sides_count:
-            return False
+            return True
         for side in sides:
-            if not (isinstance(side, int) and side > 0):
+            if not isinstance(side, int) or not (side > 0):
                 return False
-        return True
 
     def get_sides(self):  # должен возвращать значение атрибута __sides.
         return self.__sides
 
     def __len__(self):  # должен возвращать периметр фигуры.
-        return sum(self.__sides)
+        if self.sides_count == 1:
+            return self.__sides
+        else:
+            print(self.__sides, 'получено', id(self.__sides))
+            print(self.sides_count)
+            summa = sum(self.__sides)
+            return summa
 
-    def set_sides(self, *new_sides):  # должен принимать новые стороны, если их количество не равно sides_count,
-        # то не изменять, в противном случае - менять.
+# ('Метод set_sides(self, *new_sides) - должен принимать новые стороны, если их количество не равно sides_count, то не '
+# 'изменять, в противном случае - менять.') - непонятная формулировка задания!!!
+    # нужно понимать как :
+#  - должен изменить на новые длины сторон(ы) "__sides" если их количество равно sides_count, в противном случае
+    #  - не изменять, в дополнении сказано присваивать сторонам единичные значения.
+    def set_sides(self, *new_sides):
         if len(new_sides) == self.sides_count:
-            self.__sides = new_sides
+            self.__sides = list(new_sides)
+            print(f'Длины сторон изменены на {self.__sides}')
+            return self.__sides
         else:
             print('Количество сторон не совпали, изменения не приняты')
 
 
+
+
 class Circle(Figure):
     def __init__(self, color, sides):
-        Figure.__init__(self, color, sides)
+        super().__init__(color, sides)
         self.sides_count: int = 1
 
     def __radius(self):
@@ -123,37 +84,52 @@ class Triangle(Figure):
 
     def get_square(self):  # Площадь треугольника по формуле Герона
         p = 0.5 * len(self)
-        return math.sqrt(p * (p - self.sides[0]) * (p - self.sides[1]) * (p - self.sides[2]))
+        return math.sqrt(p * (p - self.__sides[0]) * (p - self.__sides[1]) * (p - self.__sides[2]))
 
 
 class Cube(Figure):
     def __init__(self, color, sides):
-        Figure.__init__(self, color, sides)
-        self.sides_count: int = 16
-        self.__sides = [sides for x in range(16)]
+        super().__init__(color, sides)
+        self.sides_count: int = 12
+        self.__sides = [sides]*12
+        print(self.__sides, 'создано бл', id(self.__sides))
 
-    def get_volume(self):  # Площадь треугольника по формуле Герона
-        return self.sides ^ 3
+    def get_volume(self):  # Обьем куба
+        return self.__sides[0] ** 3
 
 
 # Код для проверки
 circle1 = Circle((200, 200, 100), 10)  # (Цвет, стороны)
 # cube1 = Cube((222, 35, 130), 6)
+# triangle1 = Triangle((200, 200, 100), (5, 6, 7))
 
 # # Проверка на изменение цветов:
 circle1.set_color(55, 66, 77)  # Изменится
-print(circle1.get_color())
-# cube1.set_color(300, 70, 15) # Не изменится
+print(f'Текущий цвет обьекта {circle1.__class__.__name__} - {circle1.get_color()}')
+# cube1.set_color(300, 70, 15)  # Не изменится
 # print(cube1.get_color())
+# triangle1.set_color(100, 100, 100)  # дополнение теста для треугольника
+# print(triangle1.get_color())
+
 #
 # # Проверка на изменение сторон:
-# cube1.set_sides(5, 3, 12, 4, 5) # Не изменится
+# cube1.set_sides(5, 3, 12, 4, 5)  # Не изменится
 # print(cube1.get_sides())
+
 circle1.set_sides(15)  # Изменится
-print(circle1.get_sides())
-#
+# print(circle1.get_sides())
+
+# triangle1.set_sides(15, 16, 5)  # дополнение теста для треугольника
+# print(triangle1.get_sides())
+
+# cube1.set_sides(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)  # дополнение теста для треугольника
+# print(cube1.get_sides())
+
 # # Проверка периметра (круга), это и есть длина:
-# print(len(circle1))
+print(len(circle1))
+# print(len(triangle1))  # дополнение теста для треугольника
+# print(len(cube1))  # дополнение теста для куба
 #
+
 # # Проверка объёма (куба):
 # print(cube1.get_volume())
