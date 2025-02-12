@@ -5,10 +5,9 @@ import math
 
 
 class Figure:
-    def __init__(self, color, sides):
-        self.sides_count = None  # (количество сторон)
-        self.__sides = self.set_sides(sides)  # (список сторон, целые числа - инкапсулированный)
-        self.__color = self.set_color(r=color[0], g=color[1], b=color[2])  # (список цветов в формате RGB - инкапсулированный)
+    def __init__(self):
+        self.__sides = ()  # (список сторон, целые числа - инкапсулированный)
+        self.__color = ()  # (r=color[0], g=color[1], b=color[2])  # (список цветов в формате RGB - инкапсулированный)
         self.filled = False  # (признак закрашенной фигуры - Boolean)
 
     def get_color(self):  # возвращает список RGB цветов
@@ -26,12 +25,13 @@ class Figure:
             self.__color = (r, g, b)
             return [r, g, b]
         else:
-            print(f'Введенный цвет {r, g, b} не верен, цвет не поменялся:')
+            # print(f'Введенный цвет {r, g, b} не верен, цвет не поменялся:')
+            return None
 
     @staticmethod
-    def __is_valid_sides(self, *sides):  # принимает неограниченное кол-во сторон, возвращает True если все стороны
+    def __is_valid_sides(sides_count, *sides):  # принимает неограниченное кол-во сторон, возвращает True если все стороны
         # целые положительные числа и кол-во новых сторон совпадает с текущим, False - во всех остальных случаях.
-        if len(sides) == self.sides_count:
+        if len(*sides) == sides_count:
             return True
         for side in sides:
             if not isinstance(side, int) or not (side > 0):
@@ -42,10 +42,10 @@ class Figure:
 
     def __len__(self):  # должен возвращать периметр фигуры.
         if self.sides_count == 1:
-            return self.__sides
+            return self.__sides[0]
         else:
-            print(self.__sides, 'получено', id(self.__sides))
-            print(self.sides_count)
+            # print(self.__sides, 'получено', id(self.__sides))
+            # print(self.sides_count)
             summa = sum(self.__sides)
             return summa
 
@@ -61,14 +61,13 @@ class Figure:
             return self.__sides
         else:
             print('Количество сторон не совпали, изменения не приняты')
-
-
+            return None
 
 
 class Circle(Figure):
     def __init__(self, color, sides):
         super().__init__(color, sides)
-        self.sides_count: int = 1
+        self.sides_count = 1
 
     def __radius(self):
         return len(self) / 2 / 3.14
@@ -89,35 +88,38 @@ class Triangle(Figure):
 
 class Cube(Figure):
     def __init__(self, color, sides):
-        super().__init__(color, sides)
         self.sides_count: int = 12
-        self.__sides = [sides]*12
-        print(self.__sides, 'создано бл', id(self.__sides))
+        self.sides = [sides for i in range(self.sides_count)]
+        super().__init__(color, sides)
+        print(self.sides, 'создано', id(self.sides))
 
     def get_volume(self):  # Обьем куба
-        return self.__sides[0] ** 3
+        return self.sides[0] ** 3
 
 
 # Код для проверки
 circle1 = Circle((200, 200, 100), 10)  # (Цвет, стороны)
-# cube1 = Cube((222, 35, 130), 6)
+cube1 = Cube((222, 35, 130), 6)
 # triangle1 = Triangle((200, 200, 100), (5, 6, 7))
 
 # # Проверка на изменение цветов:
 circle1.set_color(55, 66, 77)  # Изменится
-print(f'Текущий цвет обьекта {circle1.__class__.__name__} - {circle1.get_color()}')
-# cube1.set_color(300, 70, 15)  # Не изменится
-# print(cube1.get_color())
+print(circle1.get_color())
+# print(f'Текущий цвет обьекта {circle1.__class__.__name__} - {circle1.get_color()}')
+cube1.set_color(300, 70, 15)  # Не изменится
+print(cube1.get_color())
+
+
 # triangle1.set_color(100, 100, 100)  # дополнение теста для треугольника
 # print(triangle1.get_color())
 
 #
 # # Проверка на изменение сторон:
-# cube1.set_sides(5, 3, 12, 4, 5)  # Не изменится
-# print(cube1.get_sides())
+cube1.set_sides(5, 3, 12, 4, 5)  # Не изменится
+print(cube1.get_sides())
 
 circle1.set_sides(15)  # Изменится
-# print(circle1.get_sides())
+print(circle1.get_sides())
 
 # triangle1.set_sides(15, 16, 5)  # дополнение теста для треугольника
 # print(triangle1.get_sides())
@@ -132,4 +134,4 @@ print(len(circle1))
 #
 
 # # Проверка объёма (куба):
-# print(cube1.get_volume())
+print(cube1.get_volume())
